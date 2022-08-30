@@ -1,0 +1,32 @@
+version: 2
+
+models:
+
+  - name: stg_customers
+    description: Staged customers data from our jaffle coffee shop
+    columns:
+      - name: customer_id
+        description: Unique identifier for customers table
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    description: Staged orders data from our jaffle coffee shop
+    columns:
+      - name: status
+        description: "{{ doc('order_status') }}"
+        tests:
+          - accepted_values:
+              values:
+                - completed
+                - returned
+                - return_pending
+                - shipped
+                - placed
+      - name: customer_id
+        description: Foreign key  to stg_customers.customer_id
+        tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
